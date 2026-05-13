@@ -3,46 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sky Riders - Play Now</title>
+    <title>Sky Riders - Full View</title>
     <style>
-        /* The Container: This acts like a window frame */
-        .game-clipping-wrapper {
-            width: 100%;
-            max-width: 1000px; /* Adjust to your preferred game width */
-            margin: 0 auto;
-            aspect-ratio: 16 / 9; /* Maintains standard widescreen look */
-            position: relative;
-            overflow: hidden; /* This is the key: it hides anything outside the box */
-            border: 4px solid #222;
-            border-radius: 8px;
-            background: #000;
+        body {
+            margin: 0;
+            background-color: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        /* The Game: We make it taller than the window to hide the bottom bar */
-        .game-clipping-wrapper iframe {
+        /* The Clipping Window */
+        .game-viewport {
+            width: 95vw;
+            height: 85vh;
+            max-width: 1200px;
+            position: relative;
+            overflow: hidden; /* Hides the bar */
+            border: 2px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* The Iframe: Taller than the container */
+        #game-iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            /* 112% height pushes the bottom ~12% (the bar) below the clipping edge */
-            height: 112%; 
+            height: 115%; /* Extra height to ensure the bar can be scrolled past */
             border: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="game-clipping-wrapper">
+    <div class="game-viewport" id="clipper">
         <iframe 
+            id="game-iframe"
             src="https://sky-riders-buk.game-files.crazygames.com/unity/unity2020/sky-riders-buk.html?v=1.357" 
             allow="accelerometer; gyroscope; gamepad; autoplay; payment; fullscreen; microphone; clipboard-read; clipboard-write 'self'" 
-            webkitallowfullscreen="true" 
-            mozallowfullscreen="true" 
-            msallowfullscreen="true" 
             allowfullscreen="true" 
             sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-presentation allow-scripts allow-same-origin allow-downloads allow-popups-to-escape-sandbox">
         </iframe>
     </div>
+
+    <script>
+        const iframe = document.getElementById('game-iframe');
+        const clipper = document.getElementById('clipper');
+
+        // This function forces the 'window' of the clipper to scroll to the bottom
+        iframe.onload = function() {
+            // Small delay to ensure the browser has rendered the iframe height
+            setTimeout(() => {
+                clipper.scrollTop = clipper.scrollHeight;
+            }, 500);
+        };
+    </script>
 
 </body>
 </html>
